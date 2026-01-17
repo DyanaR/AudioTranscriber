@@ -1,5 +1,9 @@
 # 🎙️ Audio Transcription Web App
 
+## Demo
+
+![Demo](assets/AudioTranscriberDemo.gif)
+
 ## Tech Stack
 
 ### Frontend
