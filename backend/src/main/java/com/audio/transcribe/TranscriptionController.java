@@ -8,10 +8,7 @@ import org.springframework.ai.openai.api.OpenAiAudioApi;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +24,7 @@ import java.io.IOException;
 @RestController
 //set base URL for all endpoints in this controller
 @RequestMapping("/api/transcribe")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TranscriptionController { // place where requests come in
 
     // create object of "transcription engine" that converts audio into text
