@@ -1,6 +1,6 @@
 # 🎙️ Audio Transcription Web App
 
-## 🧱 Tech Stack
+## Tech Stack
 
 ### Frontend
 - React (Vite)
@@ -17,7 +17,7 @@
 ### AI
 - OpenAI Whisper (`whisper-1`)
 
-## ⚙️ Getting Started (Local Setup)
+## Getting Started (Local Setup)
 
 ### Prerequisites
 - Java 17+
