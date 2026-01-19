@@ -41,9 +41,25 @@ public class TranscriptionController { // place where requests come in
             // where user can upload a file for app to receive
             @RequestParam("file")MultipartFile file) {
 
+        // prevent NullPointerException if file is null
+        if (file == null || file.isEmpty()){
+            return ResponseEntity
+                    .badRequest()
+                    .body("No audio file uploaded");
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        // prevent StringIndexOutOfBoundsException - if filename has no dot, lastIndexOf(".") returns -1
+        if (originalFilename == null || !originalFilename.contains(".")){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid file name");
+        }
+
+        // Handles checked IO exceptions that can occur due to external system failures
+        // such as file system errors, permissions, or disk issues
         try {
             // create temp file object
-            String originalFilename = file.getOriginalFilename();
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             File tempFile = File.createTempFile("audio", extension);
             // transfer contents of file uploaded by user to tempfile
