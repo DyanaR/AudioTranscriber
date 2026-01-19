@@ -78,13 +78,16 @@ public class TranscriptionController { // place where requests come in
             // create transcription request w AudioTranscriptionPrompt
             // which combines both audio file and desired options
             AudioTranscriptionPrompt transcriptionRequest = new AudioTranscriptionPrompt(audioFile, transcriptionOptions);
-            // get response by doing call to model w AudioTranscriptionPrompt
+            // Business Logic - get response by doing call to model w AudioTranscriptionPrompt
             AudioTranscriptionResponse response = transcriptionModel.call(transcriptionRequest);
 
             // clean up - delete temp file
             tempFile.delete();
             // get and display response
-            return new ResponseEntity<>(response.getResult().getOutput(), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    response.getResult().getOutput(),
+                    HttpStatus.OK
+            );
         } catch (IOException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
