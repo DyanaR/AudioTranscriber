@@ -39,34 +39,40 @@ public class TranscriptionController { // place where requests come in
     @PostMapping // creating an endpoint
     public ResponseEntity<String> transcribeAudio(
             // where user can upload a file for app to receive
-            @RequestParam("file")MultipartFile file) throws IOException{
+            @RequestParam("file")MultipartFile file) {
 
-        // create temp file object
-        String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-        File tempFile = File.createTempFile("audio", extension);
-        // transfer contents of file uploaded by user to tempfile
-        file.transferTo(tempFile);
+        try {
+            // create temp file object
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            File tempFile = File.createTempFile("audio", extension);
+            // transfer contents of file uploaded by user to tempfile
+            file.transferTo(tempFile);
 
-        // prepare for transcription by creating an object of OpenAiAudioTranscriptionOptions
-        // to specify our options
-        OpenAiAudioTranscriptionOptions transcriptionOptions = OpenAiAudioTranscriptionOptions.builder()
-                .responseFormat(OpenAiAudioApi.TranscriptResponseFormat.TEXT)
-                .language("en")
-                .temperature(0f)
-                .build();
-        // create object of FileSystemResource and wrap tempfile into it
-        FileSystemResource audioFile = new FileSystemResource(tempFile);
+            // prepare for transcription by creating an object of OpenAiAudioTranscriptionOptions
+            // to specify our options
+            OpenAiAudioTranscriptionOptions transcriptionOptions = OpenAiAudioTranscriptionOptions.builder()
+                    .responseFormat(OpenAiAudioApi.TranscriptResponseFormat.TEXT)
+                    .language("en")
+                    .temperature(0f)
+                    .build();
+            // create object of FileSystemResource and wrap tempfile into it
+            FileSystemResource audioFile = new FileSystemResource(tempFile);
 
-        // create transcription request w AudioTranscriptionPrompt
-        // which combines both audio file and desired options
-        AudioTranscriptionPrompt transcriptionRequest = new AudioTranscriptionPrompt(audioFile, transcriptionOptions);
-        // get response by doing call to model w AudioTranscriptionPrompt
-        AudioTranscriptionResponse response = transcriptionModel.call(transcriptionRequest);
+            // create transcription request w AudioTranscriptionPrompt
+            // which combines both audio file and desired options
+            AudioTranscriptionPrompt transcriptionRequest = new AudioTranscriptionPrompt(audioFile, transcriptionOptions);
+            // get response by doing call to model w AudioTranscriptionPrompt
+            AudioTranscriptionResponse response = transcriptionModel.call(transcriptionRequest);
 
-        // clean up - delete temp file
-        tempFile.delete();
-        // get and display response
-        return new ResponseEntity<>(response.getResult().getOutput(), HttpStatus.OK);
+            // clean up - delete temp file
+            tempFile.delete();
+            // get and display response
+            return new ResponseEntity<>(response.getResult().getOutput(), HttpStatus.OK);
+        } catch (IOException e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing audio file");
+        }
     }
 }
