@@ -1,4 +1,4 @@
-# 🎙️ Audio Transcription Web App
+# Audio Transcription Web App
 
 ## Demo
 
